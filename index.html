@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Task List</title>
+</head>
+
+<body>
+    
+    <div class="mainDiv">
+
+        <!-- MAIN HEADER -->
+        <h1 class="mainHeader">Task list 2022</h1>
+
+        <!-- FORM CREATOR/EDITOR (STICKY) -->
+        <div class="taskEditor">
+            <form action="" name="editorForm" class="editorForm" autocomplete="off" spellcheck="false">
+                <input type="text" name="formInput" class="formInput" placeholder="Enter task"><!--
+                --><input type="hidden" name="formPriority" class="formPriority" value="2"><!--
+                --><input type="submit" value="Add" name="formSubmit" class="formSubmit"><!--
+                -->
+                <!-- <input type="submit" value="&#x2713" class="formSubmit"> -->
+                
+            </form>
+
+            <!-- PRIORITY INPUT (VALUE PASSED ON TO input.formPriority) -->
+            <button class="priorityButton">
+                <span class="priorityCircle"></span>
+                <span class="priorityDescription">To do soon</span>
+            </button>
+        </div>
+
+        <!-- SECOND HEADER -->
+        <h1 class="secondHeader">Tasks</h1>
+        
+        <!-- LIST OF TASKS -->
+        <div class="tasksDiv">
+            <!-- TASK -->
+            <!-- <div class="task">
+                <button class="taskContent">tasktaktasasdask</button>
+                <div class="taskMenuDiv">
+                    <button class="taskMenu">&vellip;</button>
+                    <ul class="taskMenuDropdown">
+                        <li><button class="dropdownButton">Delete</button></li>
+                        <li><button class="dropdownButton">Edit</button></li>
+                    </ul>
+                </div>
+                <button class="desktopButton">EDIT</button>
+                <button class="desktopButton leftButt">DELETE</button>
+                <span class="taskPriority"></span>
+            </div>  -->
+            
+            <div style="clear: both;" id="clearDiv"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+    

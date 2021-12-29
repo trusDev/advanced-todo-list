@@ -1,0 +1,248 @@
+*
+{
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body
+{
+    background-color: #374151 ;
+}
+
+/* MAIN DIV */
+.mainDiv
+{
+    margin: 0 5%;
+}
+
+/* HEADERS */
+h1
+{
+    color: #6B7280;
+    font-weight: normal;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+h1.mainHeader
+{
+    font-size: 36px;
+    margin-bottom: 0;
+}
+h1.secondHeader
+{
+    font-size: 30px;
+}
+
+/* TASK EDITOR */
+.taskEditor
+{
+    background-color: #374151 ;
+    padding-top: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+/* TASK INPUT */
+.formInput
+{
+    background-color: #1F2937;
+    color: #EEE;
+    border: none;
+    outline: none;
+
+    box-sizing: border-box;
+    width: calc(98% - 51px);
+    
+    padding: 10px 20px;
+    border-radius: 15px;
+
+    font-size: 17px;
+}
+.formInput::placeholder
+{
+    color: #6B7280;
+}
+
+/* TASK SUBMIT */
+.formSubmit
+{
+    background-color: transparent;
+    color: #EC4899;
+    border: none;
+
+    margin-left: 2%;
+    /* padding: 0; */
+
+    height: 41px;
+    width: 51px;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+/* TASK PRIORITY */
+.priorityButton
+{
+    background-color: transparent;
+    border: none;
+
+    margin: 10px 0 0 5%;
+    padding: 10px;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+/* TASK PRIORITY CIRCLE */
+.priorityCircle
+{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-color: rgb(255,242,0);
+    border-radius: 50%;
+}
+/* TASK PRIORITY DESCRIPTION */
+.priorityDescription
+{
+    color: rgb(255,242,0);
+}
+
+
+/* TASK */
+.task
+{
+    background-color: #111827;
+    border-radius: 15px; /* HAS TO BE THE SAME FOR taskContent AND taskMenu */
+    float: left;
+    width: 100%;
+    height: 44px;
+    margin-bottom: 10px;
+}
+/* TASK CONTENT */
+.taskContent
+{
+    background-color: #111827;
+    color: #EEE;
+    border: none;
+
+    /* width: 100%; */
+    padding: 0 20px;
+    border-radius: 15px 0 0 15px;
+    font-size: 18px;
+    line-height: 44px; /* HAS TO MATCH .task's height*/
+
+    float: left;
+}
+/* TASK PRIORITY */
+.taskPriority
+{
+    /* display: inline-block;  ignored because of float*/
+    width: 16px;
+    height: 16px;
+    background-color: green;
+    border-radius: 50%;
+
+    margin: 14px 0; /* TOP AND BOTTOM MARGINS ARE SET TO CENTER VERTICALLY*/
+
+    float: right;
+}
+.taskMenu
+{
+    display: none;
+
+    background-color: transparent;
+    color: #EC4899;
+    border: none;
+    font-size: 25px;
+    line-height: 44px; /* HAS TO MATCH .task's height*/
+    font-weight: bold;
+
+    padding: 0 20px;
+    margin-right: 0;
+    float: right;
+
+    cursor: pointer;
+}
+/* .taskMenuDiv:hover .taskMenuDropdown
+{
+    display: block;
+} */
+.taskMenuDiv
+{
+    position: relative;
+}
+.taskMenuDropdown
+{
+    /* margin: 0; */
+    display: none;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+    top: 44px;
+    right: 21px;
+    border-radius: 10px;
+}
+.taskMenuDropdown li
+{
+    list-style-type: none;
+}
+.dropdownButton
+{
+    cursor: pointer;
+    width: 100%;
+    padding: 15px;
+    background-color: #1F2937;
+    color: white;
+    border: none;
+    text-align: left;
+}
+.desktopButton
+{
+    float: right;
+    background-color: transparent;
+    color: #8B5CF6;
+    border: none;
+    line-height: 44px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 17px 0 7.5px;
+    cursor: pointer;
+}
+.desktopButton:hover
+{
+    color: #EC4899;
+}
+.leftButt
+{
+    padding-left: 10px;
+    padding-right: 7.5px;
+}
+
+@media only screen and (max-width: 500px) {
+    .taskMenu
+    {
+        display: block;
+    }
+    .desktopButton
+    {
+        display: none;
+    }
+}
+/* 
+dark1: #374151 
+dark2: #1F2937
+dark3: #111827
+grey1: #6B7280
+light: #EEE
+pink1: #EC4899
+purp1: #8B5CF6
+*/
+
+/* 
+circle colors:
+red: rgb(237,28,36);
+yellow: rgb(255,242,0);
+green: rgb(34,177,76);
+ */
