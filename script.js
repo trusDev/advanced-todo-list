@@ -106,12 +106,7 @@ taskForm.addEventListener("submit", e =>
         newTask.setAttribute("data-id", taskID);
         taskID++;
        
-        // ADDING EVENT LISTENER TO KEBAB ICON
-        newTaskMenu.addEventListener("click", e =>
-        {
-            newTaskMenu.nextSibling.style.display = "block";
-        });
-        // ADDING EVENT LISTNER TO WINDOW
+        // HIDE DROPDOWN MENU WHEN USER CLICKS ANYWHERE
         window.addEventListener("click", e =>
         {
             if(document.activeElement != newTaskMenu)
@@ -249,6 +244,16 @@ tasksDiv.addEventListener("click", e =>
         }
     }
     
+});
+//---------------------------------------------------------------------
+// DISPLAY DROPDOWN MENU WHEN CLICK ON KEBAB ICON
+tasksDiv.addEventListener("click", e =>
+{
+    if(e.target.classList.contains("taskMenu"))
+    {
+        console.log("asdas");
+        e.target.nextElementSibling.style.display = "block";
+    }
 });
 
 //---------------------------------------------------------------------
