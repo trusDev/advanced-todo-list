@@ -80,16 +80,20 @@ taskForm.addEventListener("submit", e =>
         // LIST ITEM'S BUTTONS
         const newTaskDropdownButton1 = document.createElement("button");
         newTaskDropdownButton1.classList.add("dropdownButton");
+        newTaskDropdownButton1.classList.add("deleteBtn");
         newTaskDropdownButton1.textContent = "Delete";
         const newTaskDropdownButton2 = document.createElement("button");
         newTaskDropdownButton2.classList.add("dropdownButton");
+        newTaskDropdownButton2.classList.add("editBtn");
         newTaskDropdownButton2.textContent = "Edit";
         // DESKTOP BUTTONS
         const newTaskDesktopButton1 = document.createElement("button");
         newTaskDesktopButton1.classList.add("desktopButton");
+        newTaskDesktopButton1.classList.add("editBtn");
         newTaskDesktopButton1.textContent = "EDIT";
         const newTaskDesktopButton2 = document.createElement("button");
         newTaskDesktopButton2.classList.add("desktopButton");
+        newTaskDesktopButton2.classList.add("deleteBtn");
         newTaskDesktopButton2.classList.add("leftButt");
         newTaskDesktopButton2.textContent = "DELETE";
         // PRIORITY CIRCLE
@@ -101,28 +105,7 @@ taskForm.addEventListener("submit", e =>
         newTask.setAttribute("data-done", "false");
         newTask.setAttribute("data-id", taskID);
         taskID++;
-        // ADDING EVENT LISTENER TO NEW TASK
-        // newTask.addEventListener("click", e =>
-        // {
-        //     IF CLICK WAS ON MENU BUTTONS, IGNORE CLICK EVENT
-        //     if(!e.target.classList.contains("taskMenu") &&
-        //        !e.target.classList.contains("dropdownButton") &&
-        //        !e.target.classList.contains("desktopButton"))
-        //     {
-        //         if(newTask.getAttribute("data-done") == "false")
-        //         {
-        //                 newTask.setAttribute("data-done", "true");
-        //                 newTask.firstChild.style.textDecoration = "line-through";
-        //                 newTask.style.opacity = "0.7";
-        //         }
-        //         else if(newTask.getAttribute("data-done") == "true")
-        //         {
-        //                 newTask.setAttribute("data-done", "false");
-        //                 newTask.firstChild.style.textDecoration = "none";
-        //                 newTask.style.opacity = "1";
-        //         }
-        //     }
-        // });
+       
         // ADDING EVENT LISTENER TO KEBAB ICON
         newTaskMenu.addEventListener("click", e =>
         {
@@ -223,6 +206,44 @@ taskForm.addEventListener("submit", e =>
 
     taskForm.reset();
 });
+
+
+//---------------------------------------------------------------------
+// IF CLICK ON TASK BUT NOT ON BUTTON, PUT LINE THROUGH TASK TEXT
+tasksDiv.addEventListener("click", e =>
+{
+    // CHECKS IF BUTTON OR PRIO CIRCLE WASNT CLICKED
+    if(e.target.classList.contains("task") || 
+       e.target.classList.contains("taskContent"))
+    {
+        let taskEdited;
+
+        // ESTABLISHES taskEdited AS .task (parent) ELEMENT
+        if(e.target.classList.contains("task"))
+        {
+            taskEdited = e.target;
+        }
+        else if(e.target.classList.contains("taskContent"))
+        {
+            taskEdited = e.target.parentElement;
+        }
+
+        if(taskEdited.getAttribute("data-done") == "false")
+        {
+            taskEdited.setAttribute("data-done", "true");
+            taskEdited.firstElementChild.style.textDecoration = "line-through";
+            taskEdited.style.opacity = "0.7";
+        }
+        else if(taskEdited.getAttribute("data-done") == "true")
+        {
+            taskEdited.setAttribute("data-done", "false");
+            taskEdited.firstElementChild.style.textDecoration = "none";
+            taskEdited.style.opacity = "1";
+        }
+    }
+    
+});
+
 //---------------------------------------------------------------------
 // PRIORITY BUTTON CLICK EVENT LISTENER
 taskPriority.addEventListener("click", e =>
