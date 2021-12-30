@@ -232,13 +232,20 @@ tasksDiv.addEventListener("click", e =>
         {
             taskEdited.setAttribute("data-done", "true");
             taskEdited.firstElementChild.style.textDecoration = "line-through";
-            taskEdited.style.opacity = "0.7";
+            taskEdited.style.backgroundColor = "rgba(17, 24, 39, 0.7)";
+            taskEdited.firstElementChild.style.backgroundColor = "rgba(17, 24, 39, 0)";
+            taskEdited.firstElementChild.style.color = "rgba(238, 238, 238, 0.3)";
+            taskEdited.lastElementChild.style.opacity = "0.7";
+
         }
         else if(taskEdited.getAttribute("data-done") == "true")
         {
             taskEdited.setAttribute("data-done", "false");
             taskEdited.firstElementChild.style.textDecoration = "none";
-            taskEdited.style.opacity = "1";
+            taskEdited.style.backgroundColor = "rgba(17, 24, 39, 1)";
+            taskEdited.firstElementChild.style.backgroundColor = "rgba(17, 24, 39, 1)";
+            taskEdited.firstElementChild.style.color = "rgba(238, 238, 238, 1)";
+            taskEdited.lastElementChild.style.opacity = "1";
         }
     }
     
