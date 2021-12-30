@@ -100,70 +100,6 @@ taskForm.addEventListener("submit", e =>
         const newTaskPriority = document.createElement("span");
         newTaskPriority.classList.add("taskPriority");
         newTaskPriority.style.backgroundColor = getColor(currPriority)[0];
-
-        newTask.setAttribute("data-priority", "prio" + String(currPriority));
-        newTask.setAttribute("data-done", "false");
-        newTask.setAttribute("data-id", taskID);
-        taskID++;
-       
-        // HIDE DROPDOWN MENU WHEN USER CLICKS ANYWHERE
-        window.addEventListener("click", e =>
-        {
-            if(document.activeElement != newTaskMenu)
-            newTaskMenu.nextSibling.style.display = "none";
-        });
-        // ADDING EVENT LISTENER TO DELETE BUTTON
-        newTaskDropdownButton1.addEventListener("click", e =>
-        {
-            newTask.remove(); 
-
-        });
-        newTaskDesktopButton2.addEventListener("click", e =>
-        {
-            newTask.remove(); 
-
-        });
-        // ADDING EVENT TO EDIT BUTTON
-        newTaskDropdownButton2.addEventListener("click", e =>
-        {  
-            taskForm["formInput"].value = newTaskContent.textContent;
-            taskForm["formSubmit"].value = "Upd";
-            
-            let prio = newTask.getAttribute("data-priority");
-            prio = prio[prio.length - 1];
-            // console.log(prio);
-            currPriority = Number(prio);
-            // console.log(currPriority);
-            
-            let prioAndDesc = getColor(prio);
-            priorityCircle.style.backgroundColor = prioAndDesc[0];
-            priorityDescription.style.color = prioAndDesc[0];
-            priorityDescription.textContent = prioAndDesc[1];
-            
-            currEdited = newTask;
-            editMode = true;
-            taskForm["formInput"].focus();
-        });
-        newTaskDesktopButton1.addEventListener("click", e =>
-        {  
-            taskForm["formInput"].value = newTaskContent.textContent;
-            taskForm["formSubmit"].value = "Upd";
-            
-            let prio = newTask.getAttribute("data-priority");
-            prio = prio[prio.length - 1];
-            console.log(prio);
-            currPriority = Number(prio);
-            console.log(currPriority);
-            
-            let prioAndDesc = getColor(prio);
-            priorityCircle.style.backgroundColor = prioAndDesc[0];
-            priorityDescription.style.color = prioAndDesc[0];
-            priorityDescription.textContent = prioAndDesc[1];
-            
-            currEdited = newTask;
-            editMode = true;
-            taskForm["formInput"].focus();
-        });
         // ADD BUTTONS TO LIs
         newTaskDropdownListItem1.appendChild(newTaskDropdownButton1);
         newTaskDropdownListItem2.appendChild(newTaskDropdownButton2);
@@ -180,12 +116,27 @@ taskForm.addEventListener("submit", e =>
         newTask.appendChild(newTaskDesktopButton2);
         newTask.appendChild(newTaskPriority);
 
+        // SET ATTRIBUTES FOR NEW TASK
+        newTask.setAttribute("data-priority", "prio" + String(currPriority));
+        newTask.setAttribute("data-done", "false");
+        newTask.setAttribute("data-id", taskID);
+        taskID++;
+
+        // APPEND NEW TASK TO TASKS LIST
         tasksDiv.insertBefore(newTask, clearDiv);
+
+        // HIDE DROPDOWN MENU WHEN USER CLICKS ANYWHERE
+        window.addEventListener("click", e =>
+        {
+            if(document.activeElement != newTaskMenu)
+            newTaskMenu.nextSibling.style.display = "none";
+        });
+        
     }
     else if(editMode)
     {
         let colorAndDesc = getColor(currPriority);
-
+        
         // RISKY IMPLEMENTATION, SHOULD CHANGE TO TARGETING ELEMENTS WITH CONSTs
         currEdited.firstChild.textContent = taskForm["formInput"].value;
         taskForm["formSubmit"].value = "Add";
@@ -196,9 +147,7 @@ taskForm.addEventListener("submit", e =>
         priorityDescription.textContent = colorAndDesc[1];
         editMode = false;
     }
-
     
-
     taskForm.reset();
 });
 
@@ -209,10 +158,10 @@ tasksDiv.addEventListener("click", e =>
 {
     // CHECKS IF BUTTON OR PRIO CIRCLE WASNT CLICKED
     if(e.target.classList.contains("task") || 
-       e.target.classList.contains("taskContent"))
+    e.target.classList.contains("taskContent"))
     {
         let taskEdited;
-
+        
         // ESTABLISHES taskEdited AS .task (parent) ELEMENT
         if(e.target.classList.contains("task"))
         {
@@ -222,7 +171,7 @@ tasksDiv.addEventListener("click", e =>
         {
             taskEdited = e.target.parentElement;
         }
-
+        
         if(taskEdited.getAttribute("data-done") == "false")
         {
             taskEdited.setAttribute("data-done", "true");
@@ -231,7 +180,7 @@ tasksDiv.addEventListener("click", e =>
             taskEdited.firstElementChild.style.backgroundColor = "rgba(17, 24, 39, 0)";
             taskEdited.firstElementChild.style.color = "rgba(238, 238, 238, 0.3)";
             taskEdited.lastElementChild.style.opacity = "0.7";
-
+            
         }
         else if(taskEdited.getAttribute("data-done") == "true")
         {
@@ -251,11 +200,59 @@ tasksDiv.addEventListener("click", e =>
 {
     if(e.target.classList.contains("taskMenu"))
     {
-        console.log("asdas");
         e.target.nextElementSibling.style.display = "block";
     }
 });
 
+//---------------------------------------------------------------------
+// DELETE TASK WHEN DELETE BUTTON CLICKED
+tasksDiv.addEventListener("click", e =>
+{
+    if(e.target.classList.contains("deleteBtn"))
+    {
+        if(e.target.classList.contains("desktopButton"))
+        {
+            e.target.parentElement.remove();
+        }
+        else if(e.target.classList.contains("dropdownButton"))
+        {
+            e.target.parentElement.parentElement.parentElement.parentElement.remove();
+        }
+    }
+});
+//---------------------------------------------------------------------
+// START EDIT MODE WHEN EDIT BUTTON CLICKED
+tasksDiv.addEventListener("click", e =>
+{
+    if(e.target.classList.contains("editBtn"))
+    {
+        let taskClicked;
+        if(e.target.classList.contains("desktopButton"))
+        {
+            taskClicked = e.target.parentElement;
+        }
+        else if(e.target.classList.contains("dropdownButton"))
+        {
+            taskClicked = e.target.parentElement.parentElement.parentElement.parentElement;
+        }
+
+        taskForm["formInput"].value = taskClicked.firstElementChild.textContent;
+        taskForm["formSubmit"].value = "Upd";
+
+        let prio = taskClicked.getAttribute("data-priority");
+        prio = prio[prio.length - 1];
+        currPriority = Number(prio);
+
+        let prioAndDesc = getColor(prio);
+        priorityCircle.style.backgroundColor = prioAndDesc[0];
+        priorityDescription.style.color = prioAndDesc[0];
+        priorityDescription.textContent = prioAndDesc[1];
+
+        currEdited = taskClicked;
+        editMode = true;
+        taskForm["formInput"].focus();
+    }
+});
 //---------------------------------------------------------------------
 // PRIORITY BUTTON CLICK EVENT LISTENER
 taskPriority.addEventListener("click", e =>
