@@ -102,27 +102,27 @@ taskForm.addEventListener("submit", e =>
         newTask.setAttribute("data-id", taskID);
         taskID++;
         // ADDING EVENT LISTENER TO NEW TASK
-        newTask.addEventListener("click", e =>
-        {
-            // IF CLICK WAS ON MENU BUTTONS, IGNORE CLICK EVENT
-            if(!e.target.classList.contains("taskMenu") &&
-               !e.target.classList.contains("dropdownButton") &&
-               !e.target.classList.contains("desktopButton"))
-            {
-                if(newTask.getAttribute("data-done") == "false")
-                {
-                        newTask.setAttribute("data-done", "true");
-                        newTask.firstChild.style.textDecoration = "line-through";
-                        newTask.style.opacity = "0.7";
-                }
-                else if(newTask.getAttribute("data-done") == "true")
-                {
-                        newTask.setAttribute("data-done", "false");
-                        newTask.firstChild.style.textDecoration = "none";
-                        newTask.style.opacity = "1";
-                }
-            }
-        });
+        // newTask.addEventListener("click", e =>
+        // {
+        //     IF CLICK WAS ON MENU BUTTONS, IGNORE CLICK EVENT
+        //     if(!e.target.classList.contains("taskMenu") &&
+        //        !e.target.classList.contains("dropdownButton") &&
+        //        !e.target.classList.contains("desktopButton"))
+        //     {
+        //         if(newTask.getAttribute("data-done") == "false")
+        //         {
+        //                 newTask.setAttribute("data-done", "true");
+        //                 newTask.firstChild.style.textDecoration = "line-through";
+        //                 newTask.style.opacity = "0.7";
+        //         }
+        //         else if(newTask.getAttribute("data-done") == "true")
+        //         {
+        //                 newTask.setAttribute("data-done", "false");
+        //                 newTask.firstChild.style.textDecoration = "none";
+        //                 newTask.style.opacity = "1";
+        //         }
+        //     }
+        // });
         // ADDING EVENT LISTENER TO KEBAB ICON
         newTaskMenu.addEventListener("click", e =>
         {
