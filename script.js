@@ -153,6 +153,9 @@ taskForm.addEventListener("submit", e =>
 
 
 //---------------------------------------------------------------------
+// EVENT LISTENERS
+//---------------------------------------------------------------------
+
 // IF CLICK ON TASK BUT NOT ON BUTTON, PUT LINE THROUGH TASK TEXT
 tasksDiv.addEventListener("click", e =>
 {
@@ -274,7 +277,65 @@ taskPriority.addEventListener("click", e =>
 
     taskForm["formInput"].focus();
 });
+
 //---------------------------------------------------------------------
+// FUNCTIONS
+//---------------------------------------------------------------------
+
+// DELETE ALL TASKS AND RETURN ARRAY OF DELETED TASKS
+function deleteTasks()
+{
+    let tasks = document.querySelectorAll(".task");
+    let retArray = [];
+
+    for(let i = 0; i < tasks.length; i++)
+    {
+        retArray.push(tasks[i]);
+        tasks[i].remove();
+    }
+
+    // return retArray;
+    displayTasks(sortByCompletion(retArray, true));
+}
+// SORT ARRAY BY COMPLETION
+function sortByCompletion(arr, undoneToDone)
+{
+    let done = [];
+    let undone = [];
+    let retArr;
+
+    for(let i = 0; i < arr.length; i++)
+    {
+        if(arr[i].getAttribute("data-done") == "true")
+        {
+            done.push(arr[i]);
+        }
+        if(arr[i].getAttribute("data-done") == "false")
+        {
+            undone.push(arr[i]);
+        }
+    }
+
+    if(undoneToDone)
+    {
+        retArr = undone.concat(done);
+    }
+    else if(!undoneToDone)
+    {
+        retArr = done.concat(undone);
+    }
+
+    return retArr;
+}
+// PRINT LIST OF TASKS FROM ARRAY
+function displayTasks(arr)
+{
+    // tasksDiv.insertBefore(newTask, clearDiv);
+    for(let i = 0; i < arr.length; i++)
+    {
+        tasksDiv.insertBefore(arr[i], clearDiv);
+    }
+}
 // FUNCTION RETURNS A COLOR (RGB) AND DESCRIPTION DEPENDING ON ARGUMENT (NUMBER 1-3)
 function getColor(number)
 {
