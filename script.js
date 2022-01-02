@@ -294,8 +294,18 @@ function deleteTasks()
         tasks[i].remove();
     }
 
-    // return retArray;
-    displayTasks(sortByCompletion(retArray, true));
+    return retArray;
+}
+// DO STUFF
+function doStuffOne()
+{
+    displayTasks(sortbyPriority(deleteTasks(), true));
+}
+function doStuffTwo()
+{
+    let dic = makeDictionary();
+    deleteTasks();
+    displayTasks(dicToArr(sortByID(dic)));
 }
 // SORT ARRAY BY COMPLETION
 function sortByCompletion(arr, undoneToDone)
@@ -327,10 +337,130 @@ function sortByCompletion(arr, undoneToDone)
 
     return retArr;
 }
+// SORT ARRAY BY PRIORITY
+function sortbyPriority(arr, highToLow)
+{
+    let prio1 = [];
+    let prio2 = [];
+    let prio3 = [];
+    let retArr;
+
+    for(let i = 0; i < arr.length; i++)
+    {
+        if(arr[i].getAttribute("data-priority") == "prio1")
+        {
+            console.log("asd");
+            prio1.push(arr[i]);
+        }
+        else if(arr[i].getAttribute("data-priority") == "prio2")
+        {
+            prio2.push(arr[i]);
+        }
+        else if(arr[i].getAttribute("data-priority") == "prio3")
+        {
+            prio3.push(arr[i]);
+        }
+    }
+
+    if(highToLow)
+    {
+        retArr = prio3.concat(prio2);
+        retArr = retArr.concat(prio1);
+    }
+    else if(!highToLow)
+    {
+        retArr = prio1.concat(prio2);
+        retArr = retArr.concat(prio3);
+    }
+
+    return retArr;
+}
+// SORTS ARRAY OF TASKS BY data-id (MERGE SORT)
+function sortByID(array)
+{
+    if(array.length == 1)
+        return array;
+
+    let divIndex = Math.floor(array.length / 2);
+
+    let left = array.slice(0, divIndex);
+    let right = array.slice(divIndex, array.length);
+
+    return sortTwo(sortByID(left), sortByID(right));
+
+}
+// MAKES ONE SORTED ARRAY FROM TWO SORTED ARRAYS
+// USED IN sortByID
+function sortTwo(left, right)
+{
+    // THIS IS WHAT ELEMENTS OF left AND right ARRAYS LOOK LIKE:
+    // [HTML element (task), data-id]
+    let pointLeft = 0;
+    let pointRight = 0;
+    let sortedArr = [];
+
+    while(pointLeft < left.length && pointRight < right.length)
+    {
+        if(left[pointLeft][1] <= right[pointRight][1])
+        {
+            sortedArr.push(left[pointLeft]);
+            pointLeft++;
+        }
+        else if(left[pointLeft][1] > right[pointRight][1])
+        {
+            sortedArr.push(right[pointRight]);
+            pointRight++;
+        }
+    }
+    if(pointLeft == left.length)
+    {
+        while(pointRight < right.length)
+        {
+            sortedArr.push(right[pointRight]);
+            pointRight++;
+        }
+    }
+    else if(pointRight == right.length)
+    {
+        while(pointLeft < left.length)
+        {
+            sortedArr.push(left[pointLeft]);
+            pointLeft++;
+        }
+    }
+
+    return sortedArr;
+}
+// MAKES A DICTIONARY (KIND OF)
+// sortByID REQUIRES AN ARRAY (AS ARGUMENT) WHICH ELEMENTS LOOK LIKE THIS:
+// [HTML element, data-id]
+function makeDictionary()
+{
+    let tasks = document.querySelectorAll(".task");
+    let retDic = [];
+    for(let i = 0; i < tasks.length; i++)
+    {
+        let dataID = Number(tasks[i].getAttribute("data-id"));
+        retDic.push([tasks[i], dataID]);
+    }
+    return retDic;
+}
+// EXTRACTS A LIST OF HTML ELEMENTS FROM DICTIONARY (MADE BY makeDictionary())
+// NEEDED FOR displayTasks (after sortByID)
+function dicToArr(dic)
+{
+    let retArr = [];
+    
+    for(let i = 0; i < dic.length; i++)
+    {
+        retArr.push(dic[i][0]);
+    }
+
+    return retArr;
+}
 // PRINT LIST OF TASKS FROM ARRAY
 function displayTasks(arr)
 {
-    // tasksDiv.insertBefore(newTask, clearDiv);
     for(let i = 0; i < arr.length; i++)
     {
         tasksDiv.insertBefore(arr[i], clearDiv);
@@ -360,33 +490,3 @@ function getColor(number)
     return [color, desc];
 }
 //---------------------------------------------------------------------
-
-
-
-
-// OLD IMPLEMENTATION FOR EDIT EVENT LISTENER, BAD (I THINK)
-    // TAKS'S CONSTS
-    // const taskTextArea = newTaskDropdownButton2.parentElement.parentElement.parentElement.previousSibling;
-    // TASK'S MAIN PARENT DIV
-    // const taskParent = newTaskDropdownButton2.parentElement.parentElement.parentElement.parentElement;
-    // TASK'S PRIORITY ATTRIBUTE
-    // const taskPriorityAttr = taskParent.getAttribute("data-priority");
-
-    // taskForm["formInput"].value = taskTextArea.textContent;
-    // taskForm["formSubmit"].value = "Upd";
-
-    // let prio = taskPriorityAttr[taskPriorityAttr.length - 1];
-    // currPriority = prio;
-    // let prioAndDesc = getColor(prio);
-    // priorityCircle.style.backgroundColor = prioAndDesc[0];
-    // priorityDescription.style.color = prioAndDesc[0];
-    // priorityDescription.textContent = prioAndDesc[1];
-
-
-    // currEdited = taskTextArea.parentElement;
-    // editMode = true;
-    // taskForm["formInput"].focus();
-
-    // console.log("sdsfsd");
-    // console.log(taskPriorityAttr);
-    // console.log(newTask.getAttribute("data-priority"));
