@@ -34,8 +34,10 @@
 
         <!-- SECOND HEADER -->
         <h1 class="secondHeader">Tasks</h1>
-        <button onclick="doStuffTwo()">Sort by ID</button>
-        <button onclick="doStuffOne()">Sory by priority</button>
+        <!-- <button onclick="doStuffTwo()">Sort by ID</button>
+        <button onclick="doStuffOne()">Sory by priority</button> -->
+        <button class="showSettingsBtn">Sorting</button>
+        
         
         <!-- LIST OF TASKS -->
         <div class="tasksDiv">
@@ -55,6 +57,16 @@
             </div>  -->
             
             <div style="clear: both;" id="clearDiv"></div>
+        </div>
+    </div>
+
+    <div class="settings">
+        <div class="settingsButtons">
+            <h3 class="settingsHeader">Sorting by: </h3>
+            <button class="settingsBtn settingsDate">Date: <br><span class="settingsBtnToggle">Old &#8594; New</span></button>
+            <button class="settingsBtn settubgsPrio">Priority: <br><span class="settingsBtnToggle">High &#8594; Low</span></button>
+            <button class="settingsBtn settingsComp">Completion: <br><span class="settingsBtnToggle">Undone &#8594; Done</span></button>
+            <button class="settingsBtn settingsDone">Done</button>
         </div>
     </div>
     

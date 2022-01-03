@@ -8,10 +8,18 @@ const taskPriority = document.getElementsByClassName("priorityButton")[0];
 const priorityCircle = document.getElementsByClassName("priorityCircle")[0];
 // PRIORITY DESCRIPTION (PART OF PRIORITY BUTTON)
 const priorityDescription = document.getElementsByClassName("priorityDescription")[0];
-// TASK MENU BUTTON (KEBAB ICON)
-// const taskMenuButton = document.getElementsByClassName("taskMenu")[0];
-// TASK DROPDOWN MENU
-// const taskDropdownMenu = document.getElementsByClassName("taskMenuDropdown")[0];
+// SHOW SORT SETTINGS WINDOW BUTTON
+const showSettings = document.querySelector(".showSettingsBtn");
+// SORT SETTINGS WINDOW
+const settingsWindow = document.querySelector(".settings");
+// DATE SORT BUTTON (IN SORT SETTINGS WINDOW)
+const settingsDate = document.querySelector(".settingsDate");
+// PRIORITY SORT BUTTON (IN SORT SETTINGS WINDOW)
+const settingsPrio = document.querySelector(".settubgsPrio");
+// COMPLETION SORT BUTTON (IN SORT SETTINGS WINDOW)
+const settingsComp = document.querySelector(".settingsComp");
+// DONE BUTTON (IN SORT SETTINGS WINDOW)
+const settingsDone = document.querySelector(".settingsDone");
 
 // PRIORITY COLORS AND DESCRIPTIONS
 const levelOnePriorityColor = "rgb(34, 177, 76)";
@@ -21,10 +29,9 @@ const levelTwoPriorityDescription = "To do soon";
 const levelThreePriorityColor = "rgb(237, 28, 36)";
 const levelThreePriorityDescription = "Urgent";
 
-
-
 // CLEAR DIV (USED TO MAKE MAIN DIV COVER THE WHOLE TASKS LIST)
 const clearDiv = document.getElementById("clearDiv");
+
 
 // CURRENT PRIORITY (FOR THE INPUT SECTION)
 let currPriority = 2;
@@ -35,8 +42,29 @@ let currEdited;
 // TASK COUNTER
 let taskID = 1;
 
+// SORTING SETTINGS VARIABLES
+// So apparently, in JS you can't pass numbers to function by reference.
+// I need those variables to be passed by reference in changeSortSettings()
+// so this will be an object.
+//let dateSort = 1; // 0 - off, 1 - old to new, 2 - new to old
+//let prioSort = 0; // 0 - off, 1 - low to high, 2 - high to low
+//let compSort = 1; // 0 - off, 1 - undone to done, 2 - done to undone
+
+let sortSettings =
+{
+    dateSort: 1, // 0 - off, 1 - old to new, 2 - new to old
+    prioSort: 0, // 0 - off, 1 - low to high, 2 - high to low
+    compSort: 1 // 0 - off, 1 - undone to done, 2 - done to undone
+};
+
+
+
 //---------------------------------------------------------------------
-// FORM SUBMIT EVENT LISTENER
+// EVENT LISTENERS
+//---------------------------------------------------------------------
+
+//---------------------------------------------------------------------
+// IF SUBMIT FORM, CREATE OR EDIT TASK
 taskForm.addEventListener("submit", e =>
 {
     e.preventDefault();
@@ -150,12 +178,59 @@ taskForm.addEventListener("submit", e =>
     
     taskForm.reset();
 });
-
-
 //---------------------------------------------------------------------
-// EVENT LISTENERS
-//---------------------------------------------------------------------
+// PRIORITY BUTTON CLICK EVENT LISTENER
+taskPriority.addEventListener("click", e =>
+{
+    currPriority++;
+    if(currPriority > 3) 
+    {
+        currPriority = 1;
+    }
 
+    // CHANGE PRIORIITY BUTTON'S COLORS AND DESCRIPTION
+    let newColorAndDesc = getColor(currPriority);
+    priorityCircle.style.backgroundColor = newColorAndDesc[0];
+    priorityDescription.style.color = newColorAndDesc[0];
+    priorityDescription.textContent = newColorAndDesc[1];
+
+    // CHANGE HIDDEN INPUT'S VALUE (IN FORM)
+    taskForm["formPriority"].value = currPriority;
+
+    taskForm["formInput"].focus();
+});
+//---------------------------------------------------------------------
+// IF CLICK ON "Sorting" BUTTON, SHOW SORT SETTINGS WINDOW
+showSettings.addEventListener("click", e =>
+{
+    settingsWindow.style.display = "block";
+});
+//---------------------------------------------------------------------
+// CLICK EVENTS ON SORT SETTINGS WINDOW
+settingsWindow.addEventListener("click", e =>
+{
+    // CLOSE WINDOW IF USER CLICKS ON BACKGROUND BEHIND THE WINDOW
+    if(e.target == settingsWindow)
+    {
+        settingsWindow.style.display = "none";
+    }
+
+    if(e.target == settingsDate)
+    {
+        console.log("asd");
+        changeSortSettings(settingsDate, "dateSort", "Old &#8594; New", "New &#8594; Old");
+    }
+    if(e.target == settingsPrio)
+    {
+        changeSortSettings(settingsPrio, "prioSort", "Low &#8594; High", "High &#8594; Low");
+    }
+    if(e.target == settingsComp)
+    {
+        changeSortSettings(settingsComp, "compSort", "Undone &#8594; Done", "Done &#8594; Undone")
+    }
+
+});
+//---------------------------------------------------------------------
 // IF CLICK ON TASK BUT NOT ON BUTTON, PUT LINE THROUGH TASK TEXT
 tasksDiv.addEventListener("click", e =>
 {
@@ -238,44 +313,23 @@ tasksDiv.addEventListener("click", e =>
         {
             taskClicked = e.target.parentElement.parentElement.parentElement.parentElement;
         }
-
+        
         taskForm["formInput"].value = taskClicked.firstElementChild.textContent;
         taskForm["formSubmit"].value = "Upd";
-
+        
         let prio = taskClicked.getAttribute("data-priority");
         prio = prio[prio.length - 1];
         currPriority = Number(prio);
-
+        
         let prioAndDesc = getColor(prio);
         priorityCircle.style.backgroundColor = prioAndDesc[0];
         priorityDescription.style.color = prioAndDesc[0];
         priorityDescription.textContent = prioAndDesc[1];
-
+        
         currEdited = taskClicked;
         editMode = true;
         taskForm["formInput"].focus();
     }
-});
-//---------------------------------------------------------------------
-// PRIORITY BUTTON CLICK EVENT LISTENER
-taskPriority.addEventListener("click", e =>
-{
-    currPriority++;
-    if(currPriority > 3) 
-    {
-        currPriority = 1;
-    }
-
-    // CHANGE PRIORIITY BUTTON'S COLORS AND DESCRIPTION
-    let newColorAndDesc = getColor(currPriority);
-    priorityCircle.style.backgroundColor = newColorAndDesc[0];
-    priorityDescription.style.color = newColorAndDesc[0];
-    priorityDescription.textContent = newColorAndDesc[1];
-
-    // CHANGE HIDDEN INPUT'S VALUE (IN FORM)
-    taskForm["formPriority"].value = currPriority;
-
-    taskForm["formInput"].focus();
 });
 
 //---------------------------------------------------------------------
@@ -287,13 +341,13 @@ function deleteTasks()
 {
     let tasks = document.querySelectorAll(".task");
     let retArray = [];
-
+    
     for(let i = 0; i < tasks.length; i++)
     {
         retArray.push(tasks[i]);
         tasks[i].remove();
     }
-
+    
     return retArray;
 }
 // DO STUFF
@@ -313,7 +367,7 @@ function sortByCompletion(arr, undoneToDone)
     let done = [];
     let undone = [];
     let retArr;
-
+    
     for(let i = 0; i < arr.length; i++)
     {
         if(arr[i].getAttribute("data-done") == "true")
@@ -325,7 +379,7 @@ function sortByCompletion(arr, undoneToDone)
             undone.push(arr[i]);
         }
     }
-
+    
     if(undoneToDone)
     {
         retArr = undone.concat(done);
@@ -334,7 +388,7 @@ function sortByCompletion(arr, undoneToDone)
     {
         retArr = done.concat(undone);
     }
-
+    
     return retArr;
 }
 // SORT ARRAY BY PRIORITY
@@ -344,7 +398,7 @@ function sortbyPriority(arr, highToLow)
     let prio2 = [];
     let prio3 = [];
     let retArr;
-
+    
     for(let i = 0; i < arr.length; i++)
     {
         if(arr[i].getAttribute("data-priority") == "prio1")
@@ -361,7 +415,7 @@ function sortbyPriority(arr, highToLow)
             prio3.push(arr[i]);
         }
     }
-
+    
     if(highToLow)
     {
         retArr = prio3.concat(prio2);
@@ -372,22 +426,22 @@ function sortbyPriority(arr, highToLow)
         retArr = prio1.concat(prio2);
         retArr = retArr.concat(prio3);
     }
-
+    
     return retArr;
 }
 // SORTS ARRAY OF TASKS BY data-id (MERGE SORT)
 function sortByID(array)
 {
     if(array.length == 1)
-        return array;
-
+    return array;
+    
     let divIndex = Math.floor(array.length / 2);
-
+    
     let left = array.slice(0, divIndex);
     let right = array.slice(divIndex, array.length);
-
+    
     return sortTwo(sortByID(left), sortByID(right));
-
+    
 }
 // MAKES ONE SORTED ARRAY FROM TWO SORTED ARRAYS
 // USED IN sortByID
@@ -398,7 +452,7 @@ function sortTwo(left, right)
     let pointLeft = 0;
     let pointRight = 0;
     let sortedArr = [];
-
+    
     while(pointLeft < left.length && pointRight < right.length)
     {
         if(left[pointLeft][1] <= right[pointRight][1])
@@ -428,7 +482,7 @@ function sortTwo(left, right)
             pointLeft++;
         }
     }
-
+    
     return sortedArr;
 }
 // MAKES A DICTIONARY (KIND OF)
@@ -455,7 +509,7 @@ function dicToArr(dic)
     {
         retArr.push(dic[i][0]);
     }
-
+    
     return retArr;
 }
 // PRINT LIST OF TASKS FROM ARRAY
@@ -466,6 +520,35 @@ function displayTasks(arr)
         tasksDiv.insertBefore(arr[i], clearDiv);
     }
 }
+//---------------------------------------------------------------------
+// USED IN settingsWindow EVENT LISTENER. CHENGES SORT SETTINGS WHEN USER CLICKS ONE OF SETTINGS BUTTON
+function changeSortSettings(handle, sortSettingName, oneState, twoState)
+{
+    sortSettings[sortSettingName]++;
+    if(sortSettings[sortSettingName] >= 3)
+    {
+        sortSettings[sortSettingName] = 0;
+    }
+    
+    console.log(sortSettings[sortSettingName]);
+
+    if(sortSettings[sortSettingName] == 0)
+    {
+        handle.querySelector(".settingsBtnToggle").innerHTML = "Off";
+    }
+    if(sortSettings[sortSettingName] == 1)
+    {
+        handle.querySelector(".settingsBtnToggle").innerHTML = oneState;
+    }
+    if(sortSettings[sortSettingName] == 2)
+    {
+        handle.querySelector(".settingsBtnToggle").innerHTML = twoState;
+    }
+}
+//---------------------------------------------------------------------
+// SORTS TASKS BASED ON sortSettings
+
+//---------------------------------------------------------------------
 // FUNCTION RETURNS A COLOR (RGB) AND DESCRIPTION DEPENDING ON ARGUMENT (NUMBER 1-3)
 function getColor(number)
 {
