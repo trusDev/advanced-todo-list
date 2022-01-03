@@ -156,8 +156,20 @@ taskForm.addEventListener("submit", e =>
         // HIDE DROPDOWN MENU WHEN USER CLICKS ANYWHERE
         window.addEventListener("click", e =>
         {
-            if(document.activeElement != newTaskMenu)
-            newTaskMenu.nextSibling.style.display = "none";
+            // UNSOLVED BUG: ACTIVE ELEMENT SOLUTION SUDDENLY STOPPED WORKING
+            // WITHOUT THIS PART OF CODE EVER BEING TOUCHED
+            // document.activeElement STARTED RETURNING <body> INSTEAD OF BUTTON
+            
+            // console.log("active: " + document.activeElement);
+            // if(document.activeElement != newTaskMenu)
+            // {
+            //     newTaskMenu.nextSibling.style.display = "none";
+            //     console.log(document.activeElement);
+            // }
+            if(e.target != newTaskMenu)
+            {
+                newTaskMenu.nextElementSibling.style.display = "none";
+            }
         });
         
     }
@@ -176,6 +188,9 @@ taskForm.addEventListener("submit", e =>
         editMode = false;
     }
     
+    // ADDING AND EDITING TASKS AFFECTS TASK LIST SO SORTING IS NEEDED
+    allSorts();
+
     taskForm.reset();
 });
 //---------------------------------------------------------------------
@@ -229,6 +244,12 @@ settingsWindow.addEventListener("click", e =>
         changeSortSettings(settingsComp, "compSort", "Undone &#8594; Done", "Done &#8594; Undone")
     }
 
+    if(e.target == settingsDone)
+    {
+        settingsWindow.style.display = "none";
+        allSorts();
+    }
+
 });
 //---------------------------------------------------------------------
 // IF CLICK ON TASK BUT NOT ON BUTTON, PUT LINE THROUGH TASK TEXT
@@ -271,6 +292,8 @@ tasksDiv.addEventListener("click", e =>
         }
     }
     
+    // MARKING TASKS AS DONE AFFECTS THE TASK LIST SO SORTING IS NEEDED
+    allSorts();
 });
 //---------------------------------------------------------------------
 // DISPLAY DROPDOWN MENU WHEN CLICK ON KEBAB ICON
@@ -488,9 +511,8 @@ function sortTwo(left, right)
 // MAKES A DICTIONARY (KIND OF)
 // sortByID REQUIRES AN ARRAY (AS ARGUMENT) WHICH ELEMENTS LOOK LIKE THIS:
 // [HTML element, data-id]
-function makeDictionary()
+function makeDictionary(tasks)
 {
-    let tasks = document.querySelectorAll(".task");
     let retDic = [];
     for(let i = 0; i < tasks.length; i++)
     {
@@ -547,7 +569,50 @@ function changeSortSettings(handle, sortSettingName, oneState, twoState)
 }
 //---------------------------------------------------------------------
 // SORTS TASKS BASED ON sortSettings
+function allSorts()
+{
+    let tasks = deleteTasks();
 
+    // SORT BY ID
+    if(sortSettings.dateSort == 1 || sortSettings.dateSort == 2)
+    {
+        tasks = makeDictionary(tasks);
+        tasks = sortByID(tasks);
+        tasks = dicToArr(tasks);
+        
+        if(sortSettings.dateSort == 1)
+        {
+            // already sorted, do nothing
+        }
+        if(sortSettings.dateSort == 2)
+        {
+            tasks = tasks.reverse();
+        }
+    }
+    // SORT BY PRIORITY
+    if(sortSettings.prioSort == 1)
+    {
+        // console.log("low to high");
+        tasks = sortbyPriority(tasks, false)
+    }
+    if(sortSettings.prioSort == 2)
+    {
+        // console.log("high to low");
+        tasks = sortbyPriority(tasks, true);
+    }
+    // SORT BY COMPLETION
+    if(sortSettings.compSort == 1)
+    {
+        tasks = sortByCompletion(tasks, true);
+    }
+    if(sortSettings.compSort == 2)
+    {
+        tasks = sortByCompletion(tasks, false);
+    }
+
+
+    displayTasks(tasks);
+}
 //---------------------------------------------------------------------
 // FUNCTION RETURNS A COLOR (RGB) AND DESCRIPTION DEPENDING ON ARGUMENT (NUMBER 1-3)
 function getColor(number)
