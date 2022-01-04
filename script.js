@@ -20,6 +20,8 @@ const settingsPrio = document.querySelector(".settubgsPrio");
 const settingsComp = document.querySelector(".settingsComp");
 // DONE BUTTON (IN SORT SETTINGS WINDOW)
 const settingsDone = document.querySelector(".settingsDone");
+// DELETE DONE BUTTON
+const deleteDoneBtn = document.querySelector(".deleteDoneBtn");
 
 // PRIORITY COLORS AND DESCRIPTIONS
 const levelOnePriorityColor = "rgb(34, 177, 76)";
@@ -219,6 +221,19 @@ taskPriority.addEventListener("click", e =>
 showSettings.addEventListener("click", e =>
 {
     settingsWindow.style.display = "block";
+});
+//---------------------------------------------------------------------
+// IF CLICK ON "Delete Done" BUTTON, DELETE CROSSED (MARKED AS DONE) TASKS
+deleteDoneBtn.addEventListener("click", e => {
+    let tasks = tasksDiv.querySelectorAll(".task");
+
+    for(let i = 0; i < tasks.length; i++)
+    {
+        if(tasks[i].getAttribute("data-done") == "true")
+        {
+            tasks[i].remove();
+        }
+    }
 });
 //---------------------------------------------------------------------
 // CLICK EVENTS ON SORT SETTINGS WINDOW

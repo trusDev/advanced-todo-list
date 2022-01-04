@@ -31,6 +31,7 @@ h1.mainHeader
 h1.secondHeader
 {
     font-size: 30px;
+    margin-bottom: 10px;
 }
 
 /* TASK EDITOR */
@@ -221,17 +222,24 @@ h1.secondHeader
 }
 
 
-.showSettingsBtn
+.sortAndDelete
 {
     background-color: transparent;
     color: #EC4899;
     border: none;
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 15px;
-    margin-left: 2%;
+    margin-bottom: 5px;
+    padding: 10px 2%;
+    cursor: pointer; 
+}
+.showSettingsBtn
+{
     float: left;
-    cursor: pointer;
+}
+.deleteDoneBtn
+{
+    float: right;
 }
 .settings
 {
